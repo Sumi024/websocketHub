@@ -1,0 +1,38 @@
+{
+  "name": "websockethub",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Sumi024/websocketHub.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/Sumi024/websocketHub/issues"
+  },
+  "homepage": "https://github.com/Sumi024/websocketHub#readme",
+  "dependencies": {
+    "axios": "^0.18.1",
+    "colors": "^1.3.3"
+  },
+  "devDependencies": {
+    "@babel/core": "^7.4.3",
+    "@babel/preset-env": "^7.4.3",
+    "@types/node": "^12.7.4",
+    "babel-preset-es2015": "^6.24.1",
+    "babelify": "^10.0.0",
+    "browserify": "^16.2.3",
+    "glob": "^7.1.3",
+    "gulp": "^4.0.1",
+    "gulp-babel": "^8.0.0",
+    "gulp-typescript": "^5.0.1",
+    "gulp-uglify": "^3.0.2",
+    "typescript": "^3.4.4",
+    "vinyl-source-stream": "^2.0.0"
+  }
+}
