@@ -1,16 +1,32 @@
 import {LOCAL_STORAGE_OBSERVE_CONFIG} from '../type/localStorageObserveType';
+import webSocketService from '../type/webScoketServiceType';
 
 export default class localStorageObServe {
     private PostKeyName: string = 'LOCALSTORAGE_OBSERVE_POST';
     private GetKeyName: string = 'LOCALSTORAGE_OBSERVE_GET';
     private IsAlive: string = 'LOCALSTORAGE_OBSERVE_IS_ALIVE';
-
+    private readonly socketService: webSocketService;
+    /**
+     * ObserveModel 类型表示
+     * {
+     *     0: beforeunload
+     *     1: polling
+     * }
+     */
+    private readonly ObServeModel: Number = 0;
     constructor(config: LOCAL_STORAGE_OBSERVE_CONFIG) {
         if (window.localStorage) {
             console.log('localStorage!');
         } else {
             console.error('该浏览器不支持localStorage');
             return this;
+        }
+        if(window.onbeforeunload){
+            console.log('onbeforeunload');
+            this.ObServeModel = 0;
+            window.onbeforeunload = this.handleOnbeforeunload;
+        } else {
+            this.ObServeModel = 1;
         }
         Object.assign(this, config);
         window.onstorage = this.handleOnstorage;
@@ -33,32 +49,36 @@ export default class localStorageObServe {
     }
 
     handleIsAlive(storageEvent: any) {
-        return new Promise((resolve, reject) => {
-            console.log(storageEvent.newValue, storageEvent.oldValue, storageEvent.key);
-        });
+        /* 当IsAlive由 true 转为 false 判断为socket连接已断开 */
+        if(storageEvent.newValue === 'false' && storageEvent.oldValue === 'true'){
+            this.socketService.createSocketLink();
+        } else {
+            console.log('主连接存活！');
+        }
+        return this;
     }
 
     handleGetMessage(storageEvent: any) {
-        return new Promise((resolve, reject) => {
-            console.log(storageEvent.newValue, storageEvent.oldValue, storageEvent.key);
-        });
+        return this.socketService.handleGetMessage(storageEvent.newValue);
     }
 
     handlePostMessage(storageEvent: any) {
-        return new Promise((resolve, reject) => {
-            console.log(storageEvent.newValue, storageEvent.oldValue, storageEvent.key);
-        });
+        return this.socketService.handlePostMessage(storageEvent.newValue);
+    }
+
+    handleOnbeforeunload (){
+        return localStorage.setItem(this.IsAlive, String(false));
     }
 
     checkIsAlive() {
         const status = localStorage.getItem(this.IsAlive);
         switch (status) {
             case 'false':
-                break;
+                return false;
             case 'true':
-                break;
+                return true;
             default:
-                break;
+                return undefined;
         }
     }
 }
