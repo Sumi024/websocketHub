@@ -80,3 +80,9 @@ $RECYCLE.BIN/
 # Windows shortcuts
 *.lnk
 *.zip
+
+# typescript
+*.js
+
+# ide
+.idea
